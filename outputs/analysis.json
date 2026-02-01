@@ -1,0 +1,13 @@
+{
+  "workers_days": 63,
+  "max_inventory": 2,
+  "max_inventory_day": 8,
+  "machines_load_days": {
+    "assembly__m0": 8,
+    "cutting__m0": 7,
+    "inspection__m0": 7,
+    "assembly__m1": 6
+  },
+  "num_units": 7,
+  "num_ops": 21
+}

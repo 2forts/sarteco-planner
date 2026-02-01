@@ -8,9 +8,12 @@ from typing import Dict, List, Tuple
 import pandas as pd
 from ortools.sat.python import cp_model
 
-from .calendar import HOURS_PER_DAY, day_to_end_hour, day_to_start_hour, hours_to_days
+from .work_calendar import HOURS_PER_DAY, day_to_end_hour, day_to_start_hour, hours_to_days
 from .io import Instance, Order, OperationTemplate, load_instance
 
+import logging
+logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
+log = logging.getLogger(__name__)
 
 @dataclass
 class UnitOp:
@@ -32,7 +35,7 @@ def _setup_days(inst: Instance, stage: str, from_type: str, to_type: str) -> int
     return hours_to_days(hours)
 
 
-def solve(data_dir: Path, out_dir: Path, time_limit_s: int = 20) -> None:
+def solve(data_dir: Path, out_dir: Path, time_limit_s: int = 20, ship_window: int = 2) -> dict:
     out_dir.mkdir(parents=True, exist_ok=True)
     inst = load_instance(data_dir)
 
@@ -197,7 +200,8 @@ def solve(data_dir: Path, out_dir: Path, time_limit_s: int = 20) -> None:
     for uid, idxs in unit_ops.items():
         last_i = max(idxs, key=lambda j: ops[j].op_index)
         completion[uid] = end[last_i]
-        delivery[uid] = model.new_int_var(0, unit_due[uid], f"deliv_{uid}")
+        earliest = max(0, unit_due[uid] - ship_window) #ship_window defines a previous temporal limit
+        delivery[uid] = model.new_int_var(earliest, unit_due[uid], f"deliv_{uid}")
         model.add(delivery[uid] >= completion[uid])
 
     # Inventory constraint per day (event discretization on days)
@@ -238,8 +242,7 @@ def solve(data_dir: Path, out_dir: Path, time_limit_s: int = 20) -> None:
     (out_dir / "kpis.json").write_text(json.dumps(kpis, indent=2), encoding="utf-8")
 
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-        return
-
+        return kpis
 
     # Export schedule
     sched_rows = []
@@ -300,6 +303,7 @@ def solve(data_dir: Path, out_dir: Path, time_limit_s: int = 20) -> None:
             }
         )
     pd.DataFrame(w_rows).sort_values(["day", "skill"]).to_csv(out_dir / "workforce.csv", index=False)
+    return kpis
 
 if __name__ == "__main__":
     import argparse
@@ -308,6 +312,12 @@ if __name__ == "__main__":
     p.add_argument("--data", type=str, required=True)
     p.add_argument("--out", type=str, default="outputs")
     p.add_argument("--time_limit", type=int, default=20)
+    p.add_argument("--ship_window", type=int, default=20)
     args = p.parse_args()
+    log.info("Loading data from %s", args.data)
 
-    solve(Path(args.data), Path(args.out), time_limit_s=args.time_limit)
+    log.info("Solving (time limit = %ss)...", args.time_limit)
+    kpis = solve(Path(args.data), Path(args.out), time_limit_s=args.time_limit, ship_window = args.ship_window)
+    log.info("Status: %s", kpis["status"])
+    log.info("Objective (workers-days): %s", kpis["objective"])
+    log.info("Wrote outputs to %s", args.out)

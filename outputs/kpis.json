@@ -1,7 +1,7 @@
 {
   "status": "OPTIMAL",
   "objective": 63.0,
-  "time_limit_s": 10,
+  "time_limit_s": 20,
   "horizon_days": 24,
   "num_units": 7,
   "num_operations": 21
