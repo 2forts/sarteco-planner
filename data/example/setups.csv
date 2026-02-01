@@ -1,0 +1,7 @@
+stage,from_type,to_type,setup_hours
+cutting,A,B,2
+cutting,B,A,2
+assembly,A,B,4
+assembly,B,A,4
+inspection,A,B,0
+inspection,B,A,0

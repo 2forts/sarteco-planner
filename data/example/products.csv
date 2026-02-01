@@ -1,0 +1,7 @@
+product_type,operation_id,op_index,stage,skill,workers,duration_hours
+A,op1,1,cutting,operator,2,8
+A,op2,2,assembly,assembler,3,12
+A,op3,3,inspection,inspector,1,4
+B,op1,1,cutting,operator,2,8
+B,op2,2,assembly,assembler,3,16
+B,op3,3,inspection,inspector,1,4
