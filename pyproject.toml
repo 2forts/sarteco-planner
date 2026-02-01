@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sarteco-planner"
+version = "0.1.0"
+description = "Reference implementation for multi-stage production planning with workforce, space, setups and finite storage (SARTECO paper companion)."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "ortools>=9.10",
+  "pandas>=2.0",
+  "openpyxl>=3.1",
+  "matplotlib>=3.7",
+]
+
+[project.scripts]
+sarteco-planner = "planner.cli:main"
