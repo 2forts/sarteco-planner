@@ -1,0 +1,31 @@
+{
+  "family": "tight_storage",
+  "seed": 1071,
+  "horizon_days": 30,
+  "n_orders": 12,
+  "qty_range": [
+    1,
+    6
+  ],
+  "due_range": [
+    10,
+    25
+  ],
+  "max_finished_storage": 6,
+  "vacation_days": [
+    10,
+    11,
+    12
+  ],
+  "vacation_factor": 0.6,
+  "stage_capacity": {
+    "S1": 2,
+    "S2": 2,
+    "S3": 1
+  },
+  "staff_base": {
+    "A": 4,
+    "B": 4,
+    "C": 3
+  }
+}
