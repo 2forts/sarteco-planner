@@ -1,7 +1,7 @@
 {
   "status": "INFEASIBLE",
   "error": "",
-  "elapsed_s": 91.169297,
+  "elapsed_s": 24.493604,
   "objective": null,
   "time_limit_s": 300,
   "horizon_days": 60,

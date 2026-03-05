@@ -1,0 +1,10 @@
+{
+  "status": "INFEASIBLE",
+  "error": "",
+  "elapsed_s": 24.147255,
+  "objective": null,
+  "time_limit_s": 300,
+  "horizon_days": 34,
+  "num_units": 171,
+  "num_operations": 684
+}

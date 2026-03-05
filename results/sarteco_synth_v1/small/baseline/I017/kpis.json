@@ -1,0 +1,10 @@
+{
+  "status": "OPTIMAL",
+  "error": "",
+  "elapsed_s": 11.220964,
+  "objective": 155.0,
+  "time_limit_s": 300,
+  "horizon_days": 60,
+  "num_units": 30,
+  "num_operations": 120
+}
